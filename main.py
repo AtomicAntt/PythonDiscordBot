@@ -9,7 +9,6 @@ bot_token = os.getenv("DISCORD_BOT_TOKEN")
 intents = discord.Intents.default()
 intents.message_content = True
 
-
 # client = discord.Client(intents=intents)
 client = commands.Bot(command_prefix='$', intents=intents)
 
@@ -32,8 +31,7 @@ async def on_message(message):
 
 @client.event
 async def on_reaction_add(reaction, user):
-    reaction
-
+    await reaction.message.channel.send("Someone just added a reaction to a message!")
 
 @client.command()
 async def add(ctx, arg1: int, arg2: int):
