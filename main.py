@@ -10,6 +10,7 @@ bot_token = os.getenv("DISCORD_BOT_TOKEN")
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.reactions = True
 
 client = discord.Client(intents=intents)
 
@@ -35,14 +36,20 @@ async def on_reaction_add(reaction, user):
 
 @client.event
 async def on_message_delete(message):
-    await message.channel.send(
-        f'{message.author} just had their message deleted: {message.content}'
-    )
+    await message.channel.send(f'{message.author} just had their message deleted: {message.content}')
 
 @client.event
 async def on_message_edit(before, after):
-    await before.channel.send(
-        f'{before.author} just edited a message!\nBefore: {before.content}\nAfter: {after.content}'
-    )
+    await before.channel.send(f'{before.author} just edited a message!\nBefore: {before.content}\nAfter: {after.content}')
+
+@client.event
+async def on_raw_reaction_add(payload):
+    channel = client.get_channel(payload.channel_id)
+
+    # Since fetch_message and fetch_user are coroutines, we need to await.
+    message = await channel.fetch_message(payload.message_id)
+    user = await client.fetch_user(payload.user_id)
+
+    await channel.send(f'{user} just added a reaction to a message!\nThe message reacted to:\n**{message.content}**\nThe reaction was: {payload.emoji}')
 
 client.run(bot_token)
