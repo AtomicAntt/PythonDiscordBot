@@ -30,14 +30,19 @@ async def on_message(message):
 
 @client.event
 async def on_reaction_add(reaction, user):
-    await reaction.message.channel.send("Someone just added a reaction to a message!")
+    await reaction.message.channel.send(f'{user} just added a reaction to a message!')
 
 @client.event
 async def on_message_edit(before, after):
+    # Note that I use f-string. This is a formatted string literal which allows me to embed expressions and variables directly into strings.
     await before.channel.send(
-        f'{before.author} just editted a message!\n'
-        f'Before: {before.content}\n'
-        f'After: {after.content}'
+        f'{before.author} just edited a message!\nBefore: {before.content}\nAfter: {after.content}'
+    )
+
+@client.event
+async def on_message_delete(message):
+    await message.channel.send(
+        f'{message.author} just had their message deleted: {message.content}'
     )
 
 client.run(bot_token)
