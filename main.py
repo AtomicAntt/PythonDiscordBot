@@ -26,21 +26,21 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith(';hello'):
+    if message.content.startswith('$hello'):
         await message.channel.send('Hello!')
 
 @client.event
 async def on_reaction_add(reaction, user):
     # Note that I use f-string. This is a formatted string literal which allows me to embed expressions and variables directly into strings.
-    await reaction.message.channel.send(f'{user} just added a reaction to a message!')
+    print(f'{user} just added a reaction to a message!')
 
 @client.event
 async def on_message_delete(message):
-    await message.channel.send(f'{message.author} just had their message deleted: {message.content}')
+    print(f'{message.author} just had their message deleted: {message.content}')
 
 @client.event
 async def on_message_edit(before, after):
-    await before.channel.send(f'{before.author} just edited a message!\nBefore: {before.content}\nAfter: {after.content}')
+    print(f'{before.author} just edited a message!\nBefore: {before.content}\nAfter: {after.content}')
 
 @client.event
 async def on_raw_reaction_add(payload):
@@ -50,6 +50,6 @@ async def on_raw_reaction_add(payload):
     message = await channel.fetch_message(payload.message_id)
     user = await client.fetch_user(payload.user_id)
 
-    await channel.send(f'{user} just added a reaction to a message!\nThe message reacted to:\n**{message.content}**\nThe reaction was: {payload.emoji}')
+    print(f'{user} just added a reaction to a message!\nThe message reacted to:\n**{message.content}**\nThe reaction was: {payload.emoji}')
 
 client.run(bot_token)
