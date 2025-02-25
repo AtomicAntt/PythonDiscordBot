@@ -10,16 +10,13 @@ bot_token = os.getenv("DISCORD_BOT_TOKEN")
 
 intents = discord.Intents.default()
 intents.message_content = True
-intents.reactions = True
 
-client = discord.Client(intents=intents)
+status = discord.CustomActivity(name="your text")
+client = discord.Client(intents=intents, activity=status)
 
 @client.event
 async def on_ready():
     print(f'We have logged in as {client.user}')
-    
-    status = discord.CustomActivity(name="your text")
-    await client.change_presence(status=discord.Status.online, activity=status)
 
 @client.event
 async def on_message(message):
@@ -28,11 +25,22 @@ async def on_message(message):
 
     if message.content.startswith('$hello'):
         await message.channel.send('Hello!')
+    
+    if message.content.startswith('$reply'):
+        await message.reply('Hi!')
+    
+    if message.content.startswith('$mention'):
+        await message.channel.send(message.author.mention)
+
+    if message.content.startswith('$dm'):
+        await message.author.send('Hello!')
+
+    if message.content.startswith('$react'):
+        await message.add_reaction('✨')
 
 @client.event
 async def on_reaction_add(reaction, user):
-    # Note that I use f-string. This is a formatted string literal which allows me to embed expressions and variables directly into strings.
-    print(f'{user} just added a reaction to a message!')
+    print(f'{user} just added a reaction to a message! This was the reaction: {reaction}')
 
 @client.event
 async def on_message_delete(message):
