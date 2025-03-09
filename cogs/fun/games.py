@@ -5,6 +5,22 @@ from discord.ext import commands
 class Games(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.command()
+    async def flip(self, ctx):
+        choices = ["Heads", "Tails"]
+        await ctx.send(f'{random.choice(choices)}')
+    
+    # This is my personal command
+    @commands.command(name="8ball")
+    async def eightball(self, ctx):
+        good = ["Yep.", "It is certain.", "Without a doubt.", "Most likely.", "I guarantee it."]
+        bad = ["No.", "Definitely not.", "Very unlikely.", "I don't think so." ]
+
+        response_type = random.choice([good, bad])
+        response = random.choice(response_type)
+
+        await ctx.send(f'{ctx.author.mention} 🎱 {response}')
     
     @commands.command()
     async def guess(self, ctx):
