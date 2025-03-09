@@ -15,7 +15,7 @@ intents.message_content = True
 status = discord.CustomActivity(name="your text")
 bot = commands.Bot(command_prefix='$', intents=intents, activity=status)
 
-cogs = ["cogs.fun.games", "cogs.math.math"]
+cogs = ["cogs.fun.games", "cogs.math.math", "cogs.misc.misc"]
 
 @bot.event
 async def on_ready():
