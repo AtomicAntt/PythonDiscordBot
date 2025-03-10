@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+import random
 
 # ENV FILE (to hide token) ==================================
 import os
@@ -37,5 +38,28 @@ async def addall(ctx, *args: int):
 @bot.command()
 async def repeat(ctx, *, message):
     await ctx.send(message)
+
+@bot.command()
+async def dm(ctx):
+    await ctx.author.send("Hello!")
+
+@bot.command()
+async def reply(ctx):
+    await ctx.reply("Hello!")
+
+@bot.command()
+async def flip(ctx):
+    choices = ["Heads", "Tails"]
+    await ctx.send(f'{random.choice(choices)}')
+
+@bot.command(name="8ball")
+async def eightball(ctx):
+    good = ["Yep.", "It is certain.", "Without a doubt.", "Most likely.", "I guarantee it."]
+    bad = ["No.", "Definitely not.", "Very unlikely.", "I don't think so." ]
+
+    response_type = random.choice([good, bad])
+    response = random.choice(response_type)
+
+    await ctx.send(f'{ctx.author.mention} 🎱 {response}')
 
 bot.run(bot_token)
