@@ -48,9 +48,14 @@ async def reply(ctx):
     await ctx.reply("Hello!")
 
 @bot.command()
+async def react(ctx):
+    await ctx.message.add_reaction('✨')
+
+@bot.command()
 async def flip(ctx):
     choices = ["Heads", "Tails"]
     await ctx.send(f'{random.choice(choices)}')
+
 
 @bot.command(name="8ball")
 async def eightball(ctx):
