@@ -11,7 +11,6 @@ class Games(commands.Cog):
         choices = ["Heads", "Tails"]
         await ctx.send(f'{random.choice(choices)}')
     
-    # This is my personal command
     @commands.command(name="8ball")
     async def eightball(self, ctx):
         good = ["Yep.", "It is certain.", "Without a doubt.", "Most likely.", "I guarantee it."]
@@ -21,6 +20,29 @@ class Games(commands.Cog):
         response = random.choice(response_type)
 
         await ctx.send(f'{ctx.author.mention} 🎱 {response}')
+    
+    @commands.command()
+    async def rps(self, ctx):
+        choices = ["rock", "paper", "scissors"]
+        bot_choice = random.choice(choices)
+
+        await ctx.send(f'{ctx.author.mention} Type "rock", "paper", or "scissors" to play!')
+
+        def check(m):
+            return m.author == ctx.author and m.content.lower() in choices
+        
+        try:
+            msg = await self.bot.wait_for("message", check=check, timeout=30.0)
+            user_choice = msg.content.lower()
+
+            if user_choice == bot_choice:
+                await ctx.send(f'{ctx.author.mention} I choose {bot_choice}! Looks like it was a tie!')
+            elif (user_choice == "rock" and bot_choice == "scissors") or (user_choice == "paper" and bot_choice == "rock") or (user_choice == "scissors" and bot_choice == "paper"):
+                await ctx.send(f'{ctx.author.mention} I choose {bot_choice}! Looks like you win!')
+            else:
+                await ctx.send(f'{ctx.author.mention} I choose {bot_choice}! Looks like you lost!')
+        except TimeoutError:
+            await ctx.send(f'{ctx.author.mention} Took too long to respond!')
     
     @commands.command()
     async def guess(self, ctx):

@@ -4,12 +4,26 @@ from discord.ext import commands
 
 # https://docs.aiohttp.org/en/stable/
 # https://dictionaryapi.dev/
+# https://uselessfacts.jsph.pl/
+
 # https://stackoverflow.com/questions/68888133/error-implementing-free-dictionary-api-in-discord-py
 
 class Apis(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-    
+
+    @commands.command()
+    async def fact(self, ctx):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f'https://uselessfacts.jsph.pl/api/v2/facts/random') as response:
+                if response.status == 200:
+                    info = await response.json()
+                else:
+                    await ctx.send(f'Fact not found')
+                    return
+        
+        await ctx.send(info["text"])
+
     @commands.command()
     async def define(self, ctx, word):
         async with aiohttp.ClientSession() as session:
