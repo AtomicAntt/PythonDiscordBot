@@ -45,6 +45,32 @@ class Games(commands.Cog):
             await ctx.send(f'{ctx.author.mention} Took too long to respond!')
     
     @commands.command()
+    async def rps2(self, ctx):
+        choices = ["🪨", "🧻", "✂️"]
+        bot_choice = random.choice(choices)
+
+        message = await ctx.send(f'{ctx.author.mention} React with 🪨, 🧻, or ✂️ to play!')
+        await message.add_reaction("🪨")
+        await message.add_reaction("🧻")
+        await message.add_reaction("✂️")
+
+        def check(reaction, user):
+            return user == ctx.author and str(reaction.emoji) in choices
+        
+        try:
+            reaction, user = await self.bot.wait_for("reaction_add", check=check, timeout=30.0)
+            user_choice = str(reaction.emoji)
+
+            if user_choice == bot_choice:
+                await ctx.send(f'{ctx.author.mention} I choose {bot_choice}! Looks like it was a tie!')
+            elif (user_choice == "🪨" and bot_choice == "✂️") or (user_choice == "🧻" and bot_choice == "🪨") or (user_choice == "✂️" and bot_choice == "🧻"):
+                await ctx.send(f'{ctx.author.mention} I choose {bot_choice}! Looks like you win!')
+            else:
+                await ctx.send(f'{ctx.author.mention} I choose {bot_choice}! Looks like you lost!')
+        except TimeoutError:
+            await ctx.send(f'{ctx.author.mention} Took too long to respond!')
+    
+    @commands.command()
     async def guess(self, ctx):
         number = random.randint(1, 10)
         guesses = 3
