@@ -67,4 +67,29 @@ async def eightball(ctx):
 
     await ctx.send(f'{ctx.author.mention} 🎱 {response}')
 
+@bot.command()
+async def respond(ctx):
+    await ctx.send("You have 5 seconds to respond!")
+
+    def check(m):
+        return m.author == ctx.author
+    try:
+        await bot.wait_for("message", check=check, timeout=5.0)
+        await ctx.send("Thank you for responding!")
+    except TimeoutError:
+        await ctx.send("5 seconds has passed, it is now too late to respond!")
+
+@bot.command()
+async def reactionadd(ctx):
+    message = await ctx.send("React ✅ to this message to confirm!")
+    await message.add_reaction("✅")
+
+    def check(reaction, user):
+        return user == ctx.author and str(reaction.emoji) == "✅"
+    try:
+        await bot.wait_for('reaction_add', check=check, timeout=10.0)
+        await ctx.send("Thank you for confirming!")
+    except TimeoutError:
+        await ctx.send("10 seconds have passed, it is now too late to confirm!")
+
 bot.run(bot_token)
